@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/flow-hydraulics/flow-pds/service/common"
 	"github.com/flow-hydraulics/flow-pds/service/config"
 	"github.com/flow-hydraulics/flow-pds/service/flow_helpers"
@@ -546,7 +547,7 @@ func (svc *ContractService) UpdateSettlementStatus(ctx context.Context, db *gorm
 		return err // rollback
 	}
 
-	maxSizeOption := grpc.MaxCallRecvMsgSize(32 * 10e6)
+	maxSizeOption := grpc.MaxCallRecvMsgSize(math.MaxInt64)
 	latestBlockHeader, err := svc.flowClient.GetLatestBlockHeader(ctx, true, maxSizeOption)
 	if err != nil {
 		return err // rollback
