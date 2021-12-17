@@ -14,6 +14,7 @@ import (
 	"github.com/onflow/flow-go-sdk"
 	"github.com/onflow/flow-go-sdk/client"
 	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
 	"gorm.io/gorm"
 )
 
@@ -545,7 +546,8 @@ func (svc *ContractService) UpdateSettlementStatus(ctx context.Context, db *gorm
 		return err // rollback
 	}
 
-	latestBlockHeader, err := svc.flowClient.GetLatestBlockHeader(ctx, true)
+	maxSizeOption := grpc.MaxCallRecvMsgSize(32 * 10e6)
+	latestBlockHeader, err := svc.flowClient.GetLatestBlockHeader(ctx, true, maxSizeOption)
 	if err != nil {
 		return err // rollback
 	}
