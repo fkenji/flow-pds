@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-
 	"os"
 
 	"github.com/flow-hydraulics/flow-pds/service/app"
@@ -85,7 +84,12 @@ func runServer(cfg *config.Config) error {
 
 	// Flow client
 	// TODO: WithInsecure()?
-	flowClient, err := client.New(cfg.AccessAPIHost, grpc.WithInsecure())
+
+	maxSize := 1024 * 1024 * 64
+	flowClient, err := client.New(cfg.AccessAPIHost, grpc.WithInsecure(),
+		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(maxSize)),
+	)
+
 	if err != nil {
 		return err
 	}
